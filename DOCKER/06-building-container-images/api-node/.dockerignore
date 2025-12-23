@@ -1,0 +1,17 @@
+FROM node:20-slim
+
+WORKDIR /usr/src/app
+
+# Copy package files first
+COPY package*.json ./
+
+# Clean npm cache inside container
+RUN rm -rf /root/.npm && npm cache clean --force
+
+# Install dependencies
+RUN npm ci --no-audit --no-fund
+
+# Copy the rest of the project
+COPY . .
+
+CMD ["node", "server.js"]
